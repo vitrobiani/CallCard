@@ -28,12 +28,38 @@ jobs:
         run: flutter build web --release --base-href "/"
 
       - name: Deploy to GitHub Pages repo
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          SSH_DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-        with:
-          source-directory: build/web
-          destination-github-username: vitrobiani
-          destination-repository-name: vitrobiani.github.io
-          target-branch: main
-          target-directory: .  # push to root of the pages repo
+        run: |
+          # Setup SSH
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key"
+      
+          # Clone the pages repo
+          git clone git@github.com:vitrobiani/vitrobiani.github.io.git /tmp/pages
+      
+          # Clear it out (preserving .git and CNAME)
+          find /tmp/pages -mindepth 1 -not -path '/tmp/pages/.git*' -not -name 'CNAME' -delete
+      
+          # Copy the build output
+          cp -r build/web/. /tmp/pages/
+      
+          # Commit and push
+          cd /tmp/pages
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add -A
+          git diff --cached --quiet || git commit -m "Deploy from ${{ github.sha }}"
+          git push
+
+      # - name: Deploy to GitHub Pages repo
+      #   uses: cpina/github-action-push-to-another-repository@main
+      #   env:
+      #     SSH_DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+      #   with:
+      #     source-directory: build/web
+      #     destination-github-username: vitrobiani
+      #     destination-repository-name: vitrobiani.github.io
+      #     target-branch: main
+      #     target-directory: .  # push to root of the pages repo
