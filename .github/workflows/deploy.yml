@@ -1,0 +1,39 @@
+# .github/workflows/deploy.yml
+name: Deploy Flutter Web to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # or master, whatever your default branch is
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.9'  # pin to your version if needed
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build web
+        run: flutter build web --release --base-href "/"
+
+      - name: Deploy to GitHub Pages repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        with:
+          source-directory: build/web
+          destination-github-username: vitrobiani
+          destination-repository-name: vitrobiani.github.io
+          target-branch: main
+          target-directory: .  # push to root of the pages repo
