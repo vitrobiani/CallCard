@@ -85,6 +85,7 @@ class ProjectsDetails {
     bidirectional_bfs,
     gdo_compiler,
     BasysMX3Game,
+    rfidEntranceSystem,
   ];
 
   static final ProjectCardStruct emptyProject = ProjectCardStruct(
@@ -96,6 +97,39 @@ class ProjectsDetails {
     features: [],
     status: ProjectStatus.Archived,
     githubLink: '',
+  );
+
+  static final ProjectCardStruct rfidEntranceSystem = ProjectCardStruct(
+    name: 'RFID Entrance System',
+    langs: [Languages.Cpp, Languages.Rust],
+    tags: [Tags.Flutter, Tags.EmbeddedSystems, Tags.ClientServer],
+    summary: 'end-to-end RFID access control system with Arduino firmware (C++),'
+        ' a Rust/Axum backend with SQLite logging and Server-Sent Events, and a'
+        ' Flutter dashboard for real-time access monitoring.',
+    description: 'Built an end-to-end RFID access control system spanning embedded hardware,'
+        ' systems programming, and cross-platform frontend development. The hardware layer'
+        ' runs on an Arduino Uno, integrating an RC522 RFID reader over SPI, an LCD1602 display,'
+        ' a servo motor simulating a physical lock, and a buzzer for audio feedback. Access decisions'
+        ' are made in real time based on a whitelist of authorized card UIDs, with every scan event'
+        ' serialized and sent over USB serial to a Rust backend built with Axum and SQLite (easy transfer to postgres).'
+        ' The backend exposes a Server-Sent Events stream so connected clients receive push updates the'
+        ' moment a new event is logged, with no polling required. A Flutter dashboard consumes that'
+        ' live stream and presents the full access log in a real-time data table. The project involved'
+        ' debugging low-level hardware communication issues, managing blocking I/O safely within an async'
+        ' Rust runtime, and integrating three different languages across four communication'
+        ' protocols — Serial, SPI, HTTP, and SSE.',
+    features: [
+      'Real-time RFID card authentication with authorized UID whitelist',
+      'Servo motor lock mechanism responding instantly to access decisions',
+      'LCD display and buzzer providing on-device visual and audio feedback',
+      'Rust/Axum backend with persistent SQLite access logging',
+      'Server-Sent Events (SSE) push stream eliminating the need for frontend polling',
+      'Flutter dashboard presenting a live updating access log data table',
+      'Database layer abstracted for seamless migration from SQLite to PostgreSQL',
+      'Full serial communication pipeline from Arduino hardware to backend service',
+    ],
+    status: ProjectStatus.Completed,
+    githubLink: 'https://github.com/vitrobiani/EntranceSystem/',
   );
 
   static final ProjectCardStruct BasysMX3Game = ProjectCardStruct(
