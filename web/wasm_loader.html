@@ -24,8 +24,10 @@
         // Get WASM path from URL query parameter
         const urlParams = new URLSearchParams(window.location.search);
         let wasmPath = urlParams.get('path') || 'assets/wasm/tarot_game.wasm';
-        // Flutter web bundles assets with 'assets/' prefix
-        if (!wasmPath.startsWith('assets/assets/')) {
+        // Flutter web bundles assets with 'assets/assets/' prefix
+        if (!wasmPath.startsWith('assets/')) {
+            wasmPath = 'assets/assets/' + wasmPath;
+        } else if (!wasmPath.startsWith('assets/assets/')) {
             wasmPath = 'assets/' + wasmPath;
         }
         console.log("Loading WASM from:", wasmPath);
