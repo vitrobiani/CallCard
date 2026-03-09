@@ -15,7 +15,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   // usePathUrlStrategy();
-  HashUrlStrategy();
+  const HashUrlStrategy();
+  print("Using Hash Routing!");
 
   await FlutterFlowTheme.initialize();
 
