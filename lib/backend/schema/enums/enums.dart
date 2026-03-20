@@ -13,6 +13,7 @@ enum Tags {
   Nix,
   Flutter,
   Postgresql,
+  SQLite,
   AI,
   Algorithms,
   DataStructures,
@@ -20,6 +21,10 @@ enum Tags {
   EmbeddedSystems,
   Networks,
   Compilation,
+  Soldering,
+  Arduino,
+  OOD,
+  OOP,
 }
 
 enum Languages {
@@ -29,6 +34,8 @@ enum Languages {
   Cpp,
   Rust,
   Bash,
+  Dart,
+  SQL,
 }
 
 enum ProjectStatus {

@@ -18,6 +18,9 @@ class SkillsDetails {
       SkillItemStruct(name: 'C', lang: Languages.C),
       SkillItemStruct(name: 'C++', lang: Languages.Cpp),
       SkillItemStruct(name: 'Rust', lang: Languages.Rust),
+      SkillItemStruct(name: 'SQL', lang: Languages.SQL),
+      SkillItemStruct(name: 'Bash', lang: Languages.Bash),
+      SkillItemStruct(name: 'Dart', lang: Languages.Dart),
     ],
   );
   static final SkillCategoryStruct tools = SkillCategoryStruct(
@@ -26,6 +29,10 @@ class SkillsDetails {
       SkillItemStruct(name: 'Docker', tag: Tags.Docker),
       SkillItemStruct(name: 'Flutter', tag: Tags.Flutter),
       SkillItemStruct(name: 'PostgreSQL', tag: Tags.Postgresql),
+      SkillItemStruct(name: 'SQLite', tag: Tags.SQLite),
+      SkillItemStruct(name: 'Arduino', tag: Tags.Arduino),
+      SkillItemStruct(name: 'Linux', tag: Tags.Linux),
+      SkillItemStruct(name: 'Nix', tag: Tags.Nix),
       SkillItemStruct(name: 'Git'),
       SkillItemStruct(name: 'YOLO / OpenCV'),
     ],
@@ -62,8 +69,8 @@ class TimelineDetails {
         'Studied core computer science fundamentals including data structures, algorithms, operating systems.'
             ' Completed coursework in systems programming, database management and design, embedded programing, maths and physics.',
     dateRange: '2022 - 2026',
-    langs: [Languages.Java, Languages.C, Languages.Python, Languages.Cpp],
-    tags: [Tags.Docker, Tags.Compilation, Tags.EmbeddedSystems, Tags.AI, Tags.Algorithms, Tags.DataStructures],
+    langs: [Languages.Java, Languages.C, Languages.Python, Languages.Cpp, Languages.SQL, ],
+    tags: [Tags.Postgresql, Tags.Docker, Tags.Compilation, Tags.EmbeddedSystems, Tags.AI, Tags.Algorithms, Tags.DataStructures, Tags.OOP, Tags.OOD],
   );
 
   static final TimelineEntryStruct personal_projects = TimelineEntryStruct(
@@ -71,8 +78,8 @@ class TimelineDetails {
     description:
         'Building a portfolio website and various side projects to explore new technologies.',
     dateRange: '2022 - Present',
-    langs: [Languages.Rust],
-    tags: [Tags.Flutter, Tags.Nix, Tags.Linux],
+    langs: [Languages.Rust, Languages.Dart],
+    tags: [Tags.Flutter, Tags.Nix, Tags.Linux, Tags.Arduino, Tags.Soldering, Tags.SQLite ],
   );
 }
 
@@ -86,6 +93,8 @@ class ProjectsDetails {
     gdo_compiler,
     BasysMX3Game,
     rfidEntranceSystem,
+    finalOODProject,
+    monsterTruck,
   ];
 
   static final ProjectCardStruct emptyProject = ProjectCardStruct(
@@ -99,10 +108,58 @@ class ProjectsDetails {
     githubLink: '',
   );
 
+  static final ProjectCardStruct finalOODProject = ProjectCardStruct(
+    name: 'Store Management System',
+    langs: [Languages.Java, Languages.SQL],
+    tags: [Tags.Postgresql, Tags.DataStructures, Tags.OOP, Tags.OOD, Tags.Postgresql],
+    summary: 'A CLI-based store management system for a database class, interfacing with PostgreSQL via JDBC to manage products, orders, and shipping.',
+    description: 'A Java terminal application built as a final project for a database course. It demonstrates core database principles by connecting to a PostgreSQL instance through JDBC and performing structured queries and updates. The system supports managing a store\'s product inventory, customer orders, invoices, and shipping companies through a menu-driven interface. Table names and column references are centralized in a dedicated constants file, and the schema can be auto-populated with seed data for testing.',
+    features: [
+      'Product management – add, remove, and update inventory by product code',
+      'Order management – place and cancel orders with automatic invoice handling',
+      'Shipping company management – add/remove companies with pending-order guard',
+      'Customer and country support with hard-coded country seeding',
+      'Auto-seed mode for test data (10 products, 3 companies, 3 customers, 7 orders)',
+      'Reporting – per-product details, order history, invoices, and total store profit',
+      'Full schema drop utility for dev/reset purposes',
+      'PostgreSQL integration via JDBC with a backup file for easy DB restore',
+    ],
+    status: ProjectStatus.Archived,
+    githubLink: 'https://github.com/vitrobiani/Final_Database_Java_Project',
+  );
+
+
+  static final ProjectCardStruct monsterTruck = ProjectCardStruct(
+    name: 'BLE Monster Truck',
+    langs: [Languages.Cpp, Languages.Dart],
+    tags: [Tags.Flutter, Tags.EmbeddedSystems, Tags.Arduino, Tags.Soldering],
+    summary: 'Bluetooth Low Energy controlled monster truck with an ESP32 firmware (C++)'
+        ' and a Flutter joystick dashboard for real-time wireless motor control.',
+    description: 'Built a wireless RC monster truck controlled over Bluetooth Low Energy,'
+        ' The hardware layer runs on an ESP32, driving two DC motors through an'
+        ' L293D motor driver for independent drive and steering control. The ESP32 exposes'
+        ' a Nordic UART Service (NUS) GATT profile, allowing bidirectional BLE communication - '
+        ' Commands are received over the RX characteristic and dispatched in real time '
+        ' to the motor driver. The Flutter app handles runtime BLE permissions,'
+        ' scans for the ESP32 by MAC address, discovers the NUS GATT service, and streams'
+        ' directional commands from a joystick UI.',
+    features: [
+      'ESP32 BLE firmware exposing Nordic UART Service for wireless serial communication',
+      'L293D motor driver controlling independent drive and steering DC motors',
+      'Automatic BLE advertising restart after client disconnect',
+      'Flutter app scanning and connecting to ESP32 by MAC address at runtime',
+      'Runtime BLE and location permission handling on Android',
+      'Joystick UI sending real-time directional commands over BLE',
+      'Bidirectional communication with TX characteristic available for telemetry',
+    ],
+    status: ProjectStatus.Completed,
+    githubLink: 'https://github.com/vitrobiani/MonsterTruck',
+  );
+
   static final ProjectCardStruct rfidEntranceSystem = ProjectCardStruct(
     name: 'RFID Entrance System',
-    langs: [Languages.Cpp, Languages.Rust],
-    tags: [Tags.Flutter, Tags.EmbeddedSystems, Tags.ClientServer],
+    langs: [Languages.Cpp, Languages.Rust, Languages.Dart, Languages.SQL],
+    tags: [Tags.Flutter, Tags.EmbeddedSystems, Tags.ClientServer, Tags.Arduino, Tags.SQLite],
     summary: 'end-to-end RFID access control system with Arduino firmware (C++),'
         ' a Rust/Axum backend with SQLite logging and Server-Sent Events, and a'
         ' Flutter dashboard for real-time access monitoring.',
@@ -117,7 +174,7 @@ class ProjectsDetails {
         ' live stream and presents the full access log in a real-time data table. The project involved'
         ' debugging low-level hardware communication issues, managing blocking I/O safely within an async'
         ' Rust runtime, and integrating three different languages across four communication'
-        ' protocols — Serial, SPI, HTTP, and SSE.',
+        ' protocols: Serial, SPI, HTTP, and SSE.',
     features: [
       'Real-time RFID card authentication with authorized UID whitelist',
       'Servo motor lock mechanism responding instantly to access decisions',
@@ -221,7 +278,7 @@ class ProjectsDetails {
   static final ProjectCardStruct lzw_c_impl = ProjectCardStruct(
     name: 'lzw C Implementation',
     langs: [Languages.C],
-    tags: [Tags.Algorithms],
+    tags: [Tags.Algorithms, Tags.Networks],
     summary:
         'This is a C implementation of the LZW compression algorithm done while doing an information theory course.',
     description:
@@ -239,7 +296,7 @@ class ProjectsDetails {
   static final ProjectCardStruct COD_Beta = ProjectCardStruct(
     name: 'COD Beta',
     langs: [Languages.Cpp],
-    tags: [Tags.Algorithms, Tags.AI, Tags.GameDevelopment],
+    tags: [Tags.Algorithms, Tags.AI, Tags.GameDevelopment, Tags.OOP, Tags.OOD],
     summary: 'This was a project made for a university course on AI in games.'
         ' It is a computer playing against itself a 2D top-down (birds eye view) shooting game'
         ' There are 2 teams, each with 4 soldiers, and the goal is to eliminate the other team.',

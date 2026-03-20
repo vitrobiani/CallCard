@@ -105,6 +105,24 @@ class _LanguageImageWidgetState extends State<LanguageImageWidget> {
               fit: BoxFit.fill,
             ),
           );
+        } else if (widget!.lang == Languages.Dart) {
+          return ClipRRect(
+            child: Image.asset(
+              'assets/images/Dart_logo.png',
+              width: 200.0,
+              height: 200.0,
+              fit: BoxFit.fill,
+            ),
+          );
+        } else if (widget!.lang == Languages.SQL) {
+          return ClipRRect(
+            child: Image.asset(
+              'assets/images/sql_logo.png',
+              width: 200.0,
+              height: 200.0,
+              fit: BoxFit.fill,
+            ),
+          );
         } else if (widget!.tag == Tags.Linux) {
           return ClipRRect(
             child: Image.asset(
@@ -150,6 +168,15 @@ class _LanguageImageWidgetState extends State<LanguageImageWidget> {
               fit: BoxFit.fill,
             ),
           );
+        } else if (widget!.tag == Tags.SQLite) {
+          return ClipRRect(
+            child: Image.asset(
+              'assets/images/sqlite_logo.png',
+              width: 200.0,
+              height: 200.0,
+              fit: BoxFit.fill,
+            ),
+          );
         } else if (widget!.tag == Tags.Compilation) {
           return FaIcon(
             FontAwesomeIcons.cogs,
@@ -164,7 +191,7 @@ class _LanguageImageWidgetState extends State<LanguageImageWidget> {
           );
         } else if (widget!.tag == Tags.Algorithms) {
           return FaIcon(
-            FontAwesomeIcons.projectDiagram,
+            FontAwesomeIcons.diagramProject,
             size: 18.0,
             color: FlutterFlowTheme.of(context).primaryText,
           );
@@ -195,6 +222,30 @@ class _LanguageImageWidgetState extends State<LanguageImageWidget> {
         } else if (widget!.tag == Tags.ClientServer) {
           return FaIcon(
             FontAwesomeIcons.server,
+            size: 18.0,
+            color: FlutterFlowTheme.of(context).primaryText,
+          );
+        } else if (widget!.tag == Tags.Soldering) {
+          return FaIcon(
+            FontAwesomeIcons.fireBurner,
+            size: 18.0,
+            color: FlutterFlowTheme.of(context).primaryText,
+          );
+        } else if (widget!.tag == Tags.Arduino) {
+          return FaIcon(
+            FontAwesomeIcons.microchip,
+            size: 18.0,
+            color: FlutterFlowTheme.of(context).primaryText,
+          );
+        } else if (widget!.tag == Tags.OOD) {
+          return FaIcon(
+            FontAwesomeIcons.compassDrafting,
+            size: 18.0,
+            color: FlutterFlowTheme.of(context).primaryText,
+          );
+        } else if (widget!.tag == Tags.OOP) {
+          return FaIcon(
+            FontAwesomeIcons.objectGroup,
             size: 18.0,
             color: FlutterFlowTheme.of(context).primaryText,
           );

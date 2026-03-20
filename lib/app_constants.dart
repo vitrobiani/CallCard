@@ -9,5 +9,5 @@ abstract class FFAppConstants {
   static const String linkedin =
       'https://www.linkedin.com/in/omer-moshe-attia/';
   static const String gmail = 'omerattia132@gmail.com';
-  static const List<Tags> noImageTags = [Tags.Compilation, Tags.AI, Tags.Algorithms, Tags.GameDevelopment, Tags.Networks, Tags.ClientServer, Tags.EmbeddedSystems, Tags.DataStructures];
+  static const List<Tags> noImageTags = [Tags.Compilation, Tags.AI, Tags.Algorithms, Tags.GameDevelopment, Tags.Networks, Tags.ClientServer, Tags.EmbeddedSystems, Tags.DataStructures, Tags.Arduino, Tags.Soldering, Tags.OOP, Tags.OOD];
 }
