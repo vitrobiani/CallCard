@@ -95,6 +95,7 @@ class ProjectsDetails {
     rfidEntranceSystem,
     finalOODProject,
     monsterTruck,
+    aeorsense_integrative_project
   ];
 
   static final ProjectCardStruct emptyProject = ProjectCardStruct(
@@ -106,6 +107,38 @@ class ProjectsDetails {
     features: [],
     status: ProjectStatus.Archived,
     githubLink: '',
+  );
+
+  static final ProjectCardStruct aeorsense_integrative_project = ProjectCardStruct(
+    name: 'AeorSense Integrative Project',
+    langs: [Languages.Java, Languages.SQL, Languages.Dart],
+    tags: [Tags.Postgresql, Tags.OOD, Tags.ClientServer, Tags.DataStructures, Tags.Docker, Tags.Flutter],
+    summary: 'AeroSense is an aircraft cabin environmental monitoring and regulation system that ensures passenger health, safety, and '
+              'comfort. It provides real-time monitoring of cabin climate through '
+              'sensors, with automatic regulation to maintain optimal conditions. The system includes a dashboard for cabin crew, instant '
+              'alerts for anomalies, and manual override capabilities when needed.',
+    description: 'AeroSense is an aircraft cabin environmental monitoring and regulation system designed to ensure passenger health, safety, and '
+                  'comfort. The system continuously monitors critical parameters including air pressure, '
+                  'altitude, temperature, humidity, oxygen levels, CO2 concentration, and overall air quality through dedicated sensors. When '
+                  'readings deviate from optimal ranges, the system automatically adjusts cabin conditions via regulators, or alerts cabin crew '
+                  'for manual intervention if needed. The backend is built with Java Spring Boot and Postgres (later changed to MongoDB by request of the client (the lecturer)), '
+                  'communicating via ActiveMQ Artemis'
+                  'for asynchronous messaging, while the cross-platform Flutter client provides an intuitive dashboard for real-time data '
+                  'visualization. Maintenance technicians receive diagnostic reports and sensor failure notifications for efficient system upkeep. '
+                  'The architecture supports three primary actors: passengers who experience the regulated environment, cabin crew who monitor '
+                  'and override when necessary, and technicians who maintain system reliability. '
+                  'built for the Integrative Software Engineering course (Semester B, 2025).',
+    features: [
+      'Real-time monitoring of cabin air pressure, temperature, humidity, oxygen, and CO2 levels',
+      'Automatic environmental regulation to maintain optimal cabin conditions',
+      'Instant alerts for sensor failures and out-of-range readings',
+      'Manual override controls for cabin crew intervention',
+      'Cross-platform dashboard for mobile and desktop devices',
+      'Automated system diagnostics and maintenance reporting',
+      'Asynchronous messaging for reliable sensor-to-server communication',
+    ],
+    status: ProjectStatus.Archived,
+    githubLink: 'https://github.com/vitrobiani/AeroSense',
   );
 
   static final ProjectCardStruct finalOODProject = ProjectCardStruct(
