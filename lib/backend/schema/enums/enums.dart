@@ -25,6 +25,8 @@ enum Tags {
   Arduino,
   OOD,
   OOP,
+  RTOS,
+  Concurrency,
 }
 
 enum Languages {

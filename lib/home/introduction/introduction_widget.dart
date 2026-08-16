@@ -1,3 +1,12 @@
+// import 'dart:ffi';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:web/web.dart' as web;
+
 import '/components/tech_stack_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -21,6 +30,8 @@ class IntroductionWidget extends StatefulWidget {
 
 class _IntroductionWidgetState extends State<IntroductionWidget> {
   late IntroductionModel _model;
+  final cv_name = "omer_attia_cv.pdf";
+  final cv_path = "assets/pdfs/omer_attia_cv.pdf";
 
   @override
   void setState(VoidCallback callback) {
@@ -42,6 +53,22 @@ class _IntroductionWidgetState extends State<IntroductionWidget> {
 
     super.dispose();
   }
+
+  Future<void> openAssetPdf() async {
+    // 1. Load the PDF from assets into RAM
+    final byteData = await rootBundle.load(cv_path);
+
+    // 2. Get the device's temporary directory
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/${cv_name}');
+
+    // 3. Write the bytes to the temporary file
+    await file.writeAsBytes(byteData.buffer.asUint8List(), flush: true);
+
+    // 4. Open the file using the device's default application
+    await OpenFilex.open(file.path);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,11 +134,17 @@ class _IntroductionWidgetState extends State<IntroductionWidget> {
                   ),
                   FFButtonWidget(
                     onPressed: () async {
-                      downloadFileFromUrl('assets/pdfs/omer-attia-cv.pdf', 'omer-attia-cv.pdf');
+                      // downloadFileFromUrl('assets/pdfs/omer-attia-cv.pdf', 'omer-attia-cv.pdf');
+                      if (kIsWeb) {
+                        // Open the asset directly in a new browser tab using its URL path
+                        web.window.open(cv_path, '_blank');
+                      } else {
+                        openAssetPdf();
+                      }
                     },
                     text: 'Resume',
                     icon: FaIcon(
-                      FontAwesomeIcons.download,
+                      FontAwesomeIcons.file,
                       size: 18.0,
                     ),
                     options: FFButtonOptions(

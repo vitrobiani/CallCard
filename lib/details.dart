@@ -70,7 +70,7 @@ class TimelineDetails {
             ' Completed coursework in systems programming, database management and design, embedded programing, maths and physics.',
     dateRange: '2022 - 2026',
     langs: [Languages.Java, Languages.C, Languages.Python, Languages.Cpp, Languages.SQL, ],
-    tags: [Tags.Postgresql, Tags.Docker, Tags.Compilation, Tags.EmbeddedSystems, Tags.AI, Tags.Algorithms, Tags.DataStructures, Tags.OOP, Tags.OOD],
+    tags: [Tags.Postgresql, Tags.Docker, Tags.Compilation, Tags.EmbeddedSystems, Tags.AI, Tags.Algorithms, Tags.DataStructures, Tags.OOP, Tags.OOD, Tags.Concurrency],
   );
 
   static final TimelineEntryStruct personal_projects = TimelineEntryStruct(
@@ -79,7 +79,7 @@ class TimelineDetails {
         'Building a portfolio website and various side projects to explore new technologies.',
     dateRange: '2022 - Present',
     langs: [Languages.Rust, Languages.Dart],
-    tags: [Tags.Flutter, Tags.Nix, Tags.Linux, Tags.Arduino, Tags.Soldering, Tags.SQLite ],
+    tags: [Tags.Flutter, Tags.Nix, Tags.Linux, Tags.Arduino, Tags.Soldering, Tags.SQLite, Tags.RTOS],
   );
 }
 
@@ -95,7 +95,9 @@ class ProjectsDetails {
     rfidEntranceSystem,
     finalOODProject,
     monsterTruck,
-    aeorsense_integrative_project
+    aeorsense_integrative_project,
+    trafficLightProject,
+    edgeCvProject,
   ];
 
   static final ProjectCardStruct emptyProject = ProjectCardStruct(
@@ -107,6 +109,87 @@ class ProjectsDetails {
     features: [],
     status: ProjectStatus.Archived,
     githubLink: '',
+  );
+
+  static final ProjectCardStruct edgeCvProject = ProjectCardStruct(
+      name: 'EdgeCV',
+      langs: [Languages.Python],
+      tags: [Tags.AI, Tags.EmbeddedSystems, Tags.Concurrency],
+      summary: 'A semi-supervised pipeline that turns 31K unlabeled Flickr30k images into a'
+          ' 9,380-image person/vehicle detection dataset with zero manual annotation, then trains'
+          ' and benchmarks three detectors and ships the smallest one to a Raspberry Pi Zero 2W.',
+      description: 'A final project for a computer vision course, done with one partner. The problem'
+          ' was building a usable detector without a labeling budget, so the dataset is generated'
+          ' rather than annotated. Flickr30k captions are keyword-filtered down to ~10K images likely'
+          ' to contain people or vehicles, with all-vehicle images kept (vehicles appear in only ~10%'
+          ' of matches), person images sampled at a 3:1 ratio, and 7% negatives mixed in so the model'
+          ' also learns what is not a detection. Those images are then auto-labeled by two'
+          ' open-vocabulary models, SAM 3 and Florence-2, and the interesting part is deciding which'
+          ' one to trust: since there is no ground truth on Flickr, label quality is established'
+          ' through five independent checks - cross-model IoU agreement and Weighted Box Fusion,'
+          ' precision/recall/mAP against 2,057 human-labeled Roboflow images, an overfit sanity check'
+          ' that proves the labels are learnable at all, manual review of disagreement cases, and'
+          ' test-time augmentation that flips each image and keeps only boxes that survive the'
+          ' transform. SAM 3 won on precision, mAP, false-positive rate, and 97.2% TTA stability;'
+          ' Florence-2 detected more but invented vehicles, and its better sanity-check loss turned'
+          ' out to be the model faithfully reproducing bad labels. The final dataset carries 44,274'
+          ' detections at a 4.5:1 person-to-vehicle imbalance. Three architectures were trained on it'
+          ' - YOLO26n as the edge target, RetinaNet as an accuracy reference chosen because Focal'
+          ' Loss is built for exactly this imbalance, and a custom MobileNetV4 backbone integration.'
+          ' Augmentation moved YOLO26n from 59.2% to 65.9% mAP@0.5, and RetinaNet confirmed the Focal'
+          ' Loss hypothesis with 75.9% recall against YOLO\'s 59.7% - at 15x the parameter count.'
+          ' YOLO26n was exported to TFLite and deployed on a Pi Zero 2W as a threaded service with a'
+          ' live detection UI.',
+      features: [
+        'Caption-based pre-filtering with deliberate vehicle oversampling and negative mining',
+        'Dual auto-labeling with SAM 3 and Florence-2, no human annotation in the loop',
+        'Five-way label validation: cross-model IoU, ground truth mAP, overfit check, manual review, TTA',
+        'Test-time augmentation consistency scoring to drop boxes that vanish under flips',
+        'Weighted Box Fusion ensemble of both labelers as an agreement baseline',
+        '9,380-image YOLO-format dataset with 44,274 detections, split 80/10/10',
+        'Three trained detectors: YOLO26n, RetinaNet, and a custom MobileNetV4 backbone',
+        'TFLite export running as a threaded inference service on a Raspberry Pi Zero 2W',
+      ],
+      status: ProjectStatus.Completed,
+      githubLink: 'https://github.com/vitrobiani/CV-Course-Final-Project',
+    );
+
+  static final ProjectCardStruct trafficLightProject = ProjectCardStruct(
+    name: 'Traffic Light',
+    langs: [Languages.Cpp],
+    tags: [Tags.EmbeddedSystems, Tags.Soldering, Tags.RTOS, Tags.Concurrency, Tags.Networks, Tags.Flutter],
+    summary: 'A working traffic light built for a special-education school through Afeka\'s'
+        ' Engineers Without Borders. ESP32-C6 firmware on FreeRTOS, controllable from a'
+        ' physical button or from any phone through a self-hosted WiFi captive portal.',
+    description: 'Commissioned by a local school for students with disabilities as a teaching aid for'
+        ' road safety. I owned the firmware and the electronics; enclosure and physical layout were'
+        ' handled by other team members. The firmware runs on an ESP32-C6 under FreeRTOS rather than a'
+        ' polled super-loop: four tasks cooperate through kernel primitives - a button task that blocks'
+        ' on a task notification raised by a GPIO ISR and debounces in software, a state task that'
+        ' consumes press events and toggles the lights under a mutex, a sound task that waits on a'
+        ' binary semaphore before pulsing the JQ6500 audio module, and a web task running the DNS and'
+        ' HTTP servers. A queue fans press events in from both the physical button and the web handler'
+        ' to a single consumer, so both control paths share one source of truth. The binary semaphore'
+        ' keeps the 100 ms sound pulse off the toggle path, so audio playback never delays a light'
+        ' change. For wireless control the ESP32 brings up its own open access point and answers every'
+        ' DNS query with its own address, which triggers the captive-portal flow on phones'
+        ' automatically - the same mechanism airport and hotel WiFi uses. An NFC tag programmed with'
+        ' the network credentials lets staff tap a phone to join and land directly on the control page,'
+        ' with no app install. On the hardware side I soldered the full chain end to end: barrel jack'
+        ' into a 12V-to-5V buck converter, converter into the ESP32, ESP32 into a two-channel relay'
+        ' board, sound module, and physical button, and the relays into the red and green LED strips.',
+    features: [
+      'FreeRTOS firmware with four tasks synchronized by queue, mutex, and binary semaphore',
+      'Edge-triggered GPIO interrupt with direct task notification instead of polling',
+      'Single event queue shared by the physical button and the web interface',
+      'Self-hosted open WiFi access point with DNS-based captive portal, no app required',
+      'NFC tag provisioning - tap to join the network and open the control page',
+      'JQ6500 audio module giving audible feedback on every state change',
+      'Hand-soldered 12V-to-logic power chain: barrel jack, buck converter, dual relay',
+      'Optional Flutter Android client for direct control',
+    ],
+    status: ProjectStatus.Completed,
+    githubLink: 'https://github.com/vitrobiani/traffic-light',
   );
 
   static final ProjectCardStruct aeorsense_integrative_project = ProjectCardStruct(
@@ -262,7 +345,7 @@ class ProjectsDetails {
       'Open cards automatically in a known spread (3-card or celtic)',
       'Interactive tarot card gameplay',
     ],
-    status: ProjectStatus.InProgress,
+    status: ProjectStatus.Completed,
     githubLink: 'https://github.com/vitrobiani/tarot_macro',
     previewLink: 'wasm/tarot_game.wasm',
   );
@@ -286,7 +369,7 @@ class ProjectsDetails {
       'Error handling and reporting for syntax and runtime errors',
     ],
     status: ProjectStatus.Completed,
-    githubLink: '',
+    githubLink: 'https://github.com/vitrobiani/gdo_compiler_py',
   );
 
   static final ProjectCardStruct bidirectional_bfs = ProjectCardStruct(
@@ -376,7 +459,7 @@ class ProjectsDetails {
       'Detailed logging of game sessions and outcomes on the server side',
       'Allow games from size 3x3 to 10x10',
     ],
-    status: ProjectStatus.InProgress,
+    status: ProjectStatus.Completed,
     githubLink: 'https://github.com/vitrobiani/SeminarPuzzleGame',
   );
 }
